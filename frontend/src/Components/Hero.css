@@ -39,10 +39,11 @@
   transform: rotate(-6deg);
 }
 
-.hero-avatar span {
-  font-size: 2.1rem;
-  font-weight: 900;
-  color: #fdf1f4;
+.hero-avatar-icon {
+  width: 60px;
+  height: 50px;
+  color: #f2f6fc;
+  transform: rotate(6deg);
 }
 
 .hero-eyebrow {

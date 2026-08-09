@@ -3,13 +3,6 @@ import { fadeUp, staggerContainer } from "../motion";
 import { smoothScrollTo } from "../smoothScroll";
 import "./Hero.css";
 
-function getInitials(name = "") {
-  const parts = name.trim().split(/\s+/).filter(Boolean);
-  if (parts.length === 0) return "?";
-  if (parts.length === 1) return parts[0][0].toUpperCase();
-  return (parts[0][0] + parts[1][0]).toUpperCase();
-}
-
 function Hero({ profile }) {
   const { name, title, bio, location, github_url, linkedin_url } = profile;
 
@@ -23,19 +16,7 @@ function Hero({ profile }) {
         initial="hidden"
         animate="show"
       >
-        <motion.div variants={fadeUp}>
-          <motion.div
-            className="hero-avatar"
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          >
-            <span>{getInitials(name)}</span>
-          </motion.div>
-        </motion.div>
 
-        <motion.p className="hero-eyebrow" variants={fadeUp}>
-          مرحباً، اسمي
-        </motion.p>
         <motion.h1 className="hero-name" variants={fadeUp}>
           {name}
         </motion.h1>

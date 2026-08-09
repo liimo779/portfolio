@@ -6,5 +6,5 @@
   transform-origin: right;
   background: var(--orange-gradient);
   z-index: 100;
-  box-shadow: 0 0 12px rgba(168, 58, 90, 0.6);
+  box-shadow: 0 0 12px rgba(49, 105, 201, 0.6);
 }

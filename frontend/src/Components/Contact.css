@@ -35,11 +35,12 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+
 .contact-field input:focus,
 .contact-field textarea:focus {
   outline: none;
   border-color: var(--orange-500);
-  box-shadow: 0 0 0 3px rgba(168, 58, 90, 0.18);
+  box-shadow: 0 0 0 3px rgba(49, 105, 201, 0.18);
 }
 
 .contact-form .btn {

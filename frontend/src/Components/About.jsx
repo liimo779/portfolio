@@ -44,7 +44,7 @@ function About({ profile, skills, projects, experience }) {
       <div className="container">
         <RevealGroup className="section-head">
           <RevealItem as="span" className="section-eyebrow">
-            من أنا
+           
           </RevealItem>
           <RevealItem as="h2" className="section-title">
             نبذة عني
@@ -52,7 +52,7 @@ function About({ profile, skills, projects, experience }) {
         </RevealGroup>
 
         <RevealGroup className="about-grid" stagger={0.15}>
-          <RevealItem as="div" className="card about-bio-card" whileHover={{ y: -4 }}>
+          <RevealItem as="div" className="card about-bio-card">
             <p>{profile.bio}</p>
 
             <ul className="about-meta">

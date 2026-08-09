@@ -69,7 +69,7 @@ section {
 
 .btn-primary {
   background: var(--orange-gradient);
-  color: #fdf1f4;
+  color: #f2f6fc;
   box-shadow: var(--shadow-orange);
 }
 
