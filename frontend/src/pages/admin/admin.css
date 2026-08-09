@@ -1,0 +1,350 @@
+.admin-login-screen {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.admin-login-card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: center;
+}
+
+.admin-login-card h1 {
+  font-size: 1.4rem;
+}
+
+.admin-shell {
+  min-height: 100svh;
+  display: flex;
+  background: var(--bg);
+}
+
+.admin-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: var(--bg-elevated);
+  border-left: 1px solid var(--border-soft);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  gap: 24px;
+  position: sticky;
+  top: 0;
+  height: 100svh;
+}
+
+.admin-sidebar-brand {
+  font-weight: 900;
+  font-size: 1.1rem;
+  color: var(--text);
+  padding: 0 8px;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.admin-nav-item {
+  text-align: right;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.admin-nav-item:hover {
+  background: var(--bg-card);
+  color: var(--text);
+}
+
+.admin-nav-item-active {
+  background: rgba(49, 105, 201, 0.12);
+  color: var(--orange-300);
+  font-weight: 700;
+}
+
+.admin-sidebar-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.admin-link {
+  font-size: 0.85rem;
+  color: var(--text-mute);
+  padding: 0 8px;
+}
+
+.admin-link:hover {
+  color: var(--orange-300);
+}
+
+.admin-logout {
+  width: 100%;
+}
+
+.admin-content {
+  flex: 1;
+  padding: 36px 40px;
+  overflow-x: hidden;
+}
+
+.admin-panel {
+  max-width: 920px;
+}
+
+.admin-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.admin-panel-head h2 {
+  font-size: 1.3rem;
+}
+
+.admin-muted {
+  color: var(--text-mute);
+  font-size: 0.9rem;
+}
+
+.admin-error {
+  color: #f87171;
+  font-size: 0.88rem;
+  margin-bottom: 12px;
+}
+
+.admin-success {
+  color: var(--orange-300);
+  font-size: 0.88rem;
+  margin-bottom: 12px;
+}
+
+/* الجداول */
+.admin-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.admin-table th,
+.admin-table td {
+  text-align: right;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-soft);
+  white-space: nowrap;
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-table th {
+  color: var(--text-mute);
+  font-weight: 600;
+  background: var(--bg-elevated);
+}
+
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table-actions-col {
+  width: 160px;
+}
+
+.admin-table-actions {
+  display: flex;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.admin-table-actions .btn,
+.admin-form-actions .btn {
+  padding: 8px 16px;
+  font-size: 0.82rem;
+}
+
+.btn-danger {
+  background: transparent;
+  border: 1px solid rgba(248, 113, 113, 0.4);
+  color: #f87171;
+}
+
+.btn-danger:hover {
+  background: rgba(248, 113, 113, 0.1);
+}
+
+/* النماذج */
+.admin-form {
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: 22px;
+  margin-bottom: 22px;
+}
+
+.admin-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  text-align: right;
+}
+
+.admin-field-wide {
+  grid-column: 1 / -1;
+}
+
+.admin-field-checkbox {
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.admin-field input[type="text"],
+.admin-field input[type="number"],
+.admin-field input[type="password"],
+.admin-field textarea {
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  color: var(--text);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+.admin-field input:focus,
+.admin-field textarea:focus {
+  outline: none;
+  border-color: var(--orange-500);
+  box-shadow: 0 0 0 3px rgba(49, 105, 201, 0.18);
+}
+
+.admin-field input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--orange-500);
+}
+
+.admin-form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+/* الرسائل */
+.admin-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.admin-message-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  text-align: right;
+}
+
+.admin-message-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  font-size: 0.85rem;
+}
+
+.admin-message-head strong {
+  color: var(--text);
+  margin-inline-end: 8px;
+}
+
+.admin-message-head a {
+  color: var(--text-mute);
+}
+
+.admin-message-date {
+  color: var(--text-mute);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.admin-message-body {
+  color: var(--text-dim);
+  font-size: 0.92rem;
+  line-height: 1.8;
+  margin-bottom: 14px;
+}
+
+@media (max-width: 900px) {
+  .admin-shell {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    position: static;
+    height: auto;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    overflow-x: auto;
+  }
+
+  .admin-nav {
+    flex-direction: row;
+  }
+
+  .admin-sidebar-footer {
+    flex-direction: row;
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .admin-content {
+    padding: 24px 18px;
+  }
+
+  .admin-form-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -10,19 +10,30 @@ const runQuery = (db, sql, params = []) => {
   });
 };
 
-const initDatabase = async () => {
+const tables = ["profile", "skills", "projects", "experience", "education", "messages"];
 
+const createTables = async () => {
   try {
-    // 1. حذف الجدول وإعادة إنشائه
-    await runQuery(db, `DROP TABLE IF EXISTS profile`);
-    
+    // إعادة الجداول من الصفر لضمان مطابقتها لآخر تعريف للسكيمة
+    for (const table of tables) {
+      await runQuery(db, `DROP TABLE IF EXISTS ${table}`);
+    }
+
+    // بيانات الملف الشخصي / التعريف بصاحب البورتفوليو
     await runQuery(db, `CREATE TABLE IF NOT EXISTS profile (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
-      my_id INTEGER NOT NULL,
-      description TEXT,
-      github_url TEXT
+      title TEXT,
+      bio TEXT,
+      email TEXT,
+      phone TEXT,
+      location TEXT,
+      github_url TEXT,
+      linkedin_url TEXT,
+      resume_url TEXT
     )`);
 
+    // المهارات التقنية
     await runQuery(db, `CREATE TABLE IF NOT EXISTS skills (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
@@ -30,74 +41,56 @@ const initDatabase = async () => {
       level INTEGER
     )`);
 
-    // 2. إدخال البيانات في جدول profile
-    await runQuery(
-      db,
-      `INSERT INTO profile (name, my_id, description, github_url) VALUES (?, ?, ?, ?)`,
-      ["Lamar", 2507241, "is", "https://github.com/liimo779S"]
-    );
+    // المشاريع
+    await runQuery(db, `CREATE TABLE IF NOT EXISTS projects (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      description TEXT,
+      tech_stack TEXT,
+      github_url TEXT,
+      live_url TEXT,
+      featured INTEGER DEFAULT 0,
+      sort_order INTEGER DEFAULT 0
+    )`);
 
-    console.log("تم إنشاء الجداول وإدخال البيانات بنجاح!");
+    // الخبرات العملية
+    await runQuery(db, `CREATE TABLE IF NOT EXISTS experience (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      company TEXT NOT NULL,
+      role TEXT NOT NULL,
+      description TEXT,
+      location TEXT,
+      start_date TEXT,
+      end_date TEXT,
+      sort_order INTEGER DEFAULT 0
+    )`);
 
+    // المؤهلات الدراسية
+    await runQuery(db, `CREATE TABLE IF NOT EXISTS education (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      institution TEXT NOT NULL,
+      degree TEXT,
+      field TEXT,
+      start_date TEXT,
+      end_date TEXT,
+      sort_order INTEGER DEFAULT 0
+    )`);
+
+    // رسائل نموذج التواصل
+    await runQuery(db, `CREATE TABLE IF NOT EXISTS messages (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      email TEXT NOT NULL,
+      message TEXT NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`);
+
+    console.log("تم إنشاء الجداول بنجاح!");
   } catch (error) {
-    // أي خطأ يحدث في SQL سيتم التقاطه هنا
-    console.error("حدث خطأ أثناء التعامل مع قاعدة البيانات:", error.message);
-  } finally {
-    // إغلاق الاتصال بقاعدة البيانات
-    db.close();
-  }
-};
-
-const insertSkills = async () => {
-
-  // قائمة المهارات للـ CV
-  const skillsList = [
-    // Web Development & Backend
-    { name: "JavaScript", category: "Web Development", level: 85 },
-    { name: "Node.js", category: "Backend Development", level: 80 },
-    { name: "Express.js", category: "Backend Development", level: 80 },
-    { name: "React.js", category: "Frontend Development", level: 75 },
-    { name: "HTML5 & CSS3", category: "Frontend Development", level: 90 },
-    { name: "RESTful APIs", category: "Backend Development", level: 85 },
-
-    // Database & Data Analysis
-    { name: "SQL & Relational Databases", category: "Database", level: 85 },
-    { name: "SQLite", category: "Database", level: 85 },
-    { name: "Data Analysis", category: "Data Science", level: 75 },
-
-    // Tools & Methodologies
-    { name: "Git & GitHub", category: "Developer Tools", level: 80 },
-    { name: "Postman", category: "Developer Tools", level: 80 },
-    { name: "VS Code", category: "Developer Tools", level: 90 },
-
-    // Soft Skills
-    { name: "Problem Solving", category: "Soft Skills", level: 90 },
-    { name: "Teamwork & Collaboration", category: "Soft Skills", level: 85 },
-    { name: "Time Management", category: "Soft Skills", level: 85 }
-  ];
-
-  try {
-    console.log("جاري إدخال المهارات...");
-
-    for (const skill of skillsList) {
-      await runQuery(
-        db,
-        `INSERT INTO skills (name, category, level) VALUES (?, ?, ?)`,
-        [skill.name, skill.category, skill.level]
-      );
-    }
-
-    console.log("تمت إضافة جميع المهارات بنجاح!");
-
-  } catch (error) {
-    console.error("حدث خطأ أثناء إدخال المهارات:", error.message);
+    console.error("حدث خطأ أثناء إنشاء الجداول:", error.message);
   } finally {
     db.close();
   }
 };
 
- 
-initDatabase();
-insertSkills();
-
- 
+createTables();

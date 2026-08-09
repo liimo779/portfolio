@@ -1,0 +1,69 @@
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 20px;
+}
+
+.about-bio-card {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  text-align: right;
+}
+
+.about-bio-card p {
+  color: var(--text-dim);
+  font-size: 1rem;
+  line-height: 1.9;
+}
+
+.about-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: var(--text-mute);
+}
+
+.about-meta li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.about-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.about-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 22px 12px;
+  text-align: center;
+}
+
+.about-stat-value {
+  font-size: 1.9rem;
+  font-weight: 900;
+  background: var(--orange-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.about-stat-label {
+  font-size: 0.82rem;
+  color: var(--text-mute);
+}
+
+@media (max-width: 780px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+}

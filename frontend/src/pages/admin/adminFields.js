@@ -1,0 +1,103 @@
+export const PROFILE_FIELDS = [
+  { name: "name", label: "الاسم", type: "text", required: true },
+  { name: "title", label: "المسمى الوظيفي", type: "text" },
+  { name: "bio", label: "نبذة تعريفية", type: "textarea" },
+  { name: "email", label: "البريد الإلكتروني", type: "text" },
+  { name: "phone", label: "الهاتف", type: "text" },
+  { name: "location", label: "الموقع", type: "text" },
+  { name: "github_url", label: "رابط GitHub", type: "text" },
+  { name: "linkedin_url", label: "رابط LinkedIn", type: "text" },
+  { name: "resume_url", label: "رابط السيرة الذاتية", type: "text" },
+];
+
+export const RESOURCES = {
+  skills: {
+    title: "المهارات",
+    singular: "مهارة",
+    displayColumns: [
+      { key: "name", label: "الاسم" },
+      { key: "category", label: "الفئة" },
+      { key: "level", label: "المستوى" },
+    ],
+    fields: [
+      { name: "name", label: "الاسم", type: "text", required: true },
+      { name: "category", label: "الفئة", type: "text" },
+      { name: "level", label: "المستوى (0-100)", type: "number" },
+    ],
+    empty: { name: "", category: "", level: 50 },
+  },
+  projects: {
+    title: "المشاريع",
+    singular: "مشروع",
+    displayColumns: [
+      { key: "title", label: "العنوان" },
+      { key: "tech_stack", label: "التقنيات" },
+      { key: "featured", label: "مميز" },
+    ],
+    fields: [
+      { name: "title", label: "العنوان", type: "text", required: true },
+      { name: "description", label: "الوصف", type: "textarea" },
+      { name: "tech_stack", label: "التقنيات (مفصولة بفاصلة)", type: "text" },
+      { name: "github_url", label: "رابط الكود المصدري", type: "text" },
+      { name: "live_url", label: "رابط العرض المباشر", type: "text" },
+      { name: "featured", label: "مشروع مميز", type: "checkbox" },
+      { name: "sort_order", label: "ترتيب العرض", type: "number" },
+    ],
+    empty: {
+      title: "",
+      description: "",
+      tech_stack: "",
+      github_url: "",
+      live_url: "",
+      featured: 0,
+      sort_order: 0,
+    },
+  },
+  experience: {
+    title: "الخبرة العملية",
+    singular: "خبرة",
+    displayColumns: [
+      { key: "role", label: "المسمى" },
+      { key: "company", label: "الشركة" },
+      { key: "start_date", label: "من" },
+      { key: "end_date", label: "إلى" },
+    ],
+    fields: [
+      { name: "company", label: "الشركة", type: "text", required: true },
+      { name: "role", label: "المسمى الوظيفي", type: "text", required: true },
+      { name: "description", label: "الوصف", type: "textarea" },
+      { name: "location", label: "الموقع", type: "text" },
+      { name: "start_date", label: "تاريخ البداية (YYYY-MM)", type: "text" },
+      { name: "end_date", label: "تاريخ النهاية (اتركه فارغ لو مستمر)", type: "text" },
+      { name: "sort_order", label: "ترتيب العرض", type: "number" },
+    ],
+    empty: {
+      company: "",
+      role: "",
+      description: "",
+      location: "",
+      start_date: "",
+      end_date: "",
+      sort_order: 0,
+    },
+  },
+  education: {
+    title: "التعليم",
+    singular: "مؤهل",
+    displayColumns: [
+      { key: "degree", label: "الدرجة" },
+      { key: "institution", label: "الجهة التعليمية" },
+      { key: "start_date", label: "من" },
+      { key: "end_date", label: "إلى" },
+    ],
+    fields: [
+      { name: "institution", label: "الجهة التعليمية", type: "text", required: true },
+      { name: "degree", label: "الدرجة العلمية", type: "text" },
+      { name: "field", label: "التخصص", type: "text" },
+      { name: "start_date", label: "تاريخ البداية (YYYY-MM)", type: "text" },
+      { name: "end_date", label: "تاريخ النهاية", type: "text" },
+      { name: "sort_order", label: "ترتيب العرض", type: "number" },
+    ],
+    empty: { institution: "", degree: "", field: "", start_date: "", end_date: "", sort_order: 0 },
+  },
+};

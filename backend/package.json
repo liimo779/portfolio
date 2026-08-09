@@ -4,16 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-  "dev": "node server.js",
-  "start": "node server.js"
-},
+    "dev": "node server.js",
+    "start": "node server.js",
+    "schema": "node database/schema.js",
+    "seed": "node database/sample_data.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
     "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
     "sqlite3": "^6.0.1"
   }
 }
