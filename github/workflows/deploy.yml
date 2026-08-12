@@ -13,11 +13,12 @@ jobs:
 
       - name: Install and Build
         run: |
+          cd frontend
           npm install
           npm run build
 
       - name: Deploy
         uses: jamesives/github-pages-deploy-action@v4
         with:
-          folder: dist
+          folder: frontend/dist
           branch: gh-pages
