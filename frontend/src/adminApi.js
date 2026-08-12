@@ -2,7 +2,7 @@ import axios from "axios";
 import { getToken, clearToken } from "./adminAuth";
 
 const adminApi = axios.create({
-  baseURL: "http://localhost:5001/api/admin",
+  baseURL: "/api/admin",
 });
 
 adminApi.interceptors.request.use((config) => {

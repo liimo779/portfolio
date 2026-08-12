@@ -14,7 +14,7 @@ function AdminLogin({ onSuccess }) {
     setError("");
 
     try {
-      const res = await axios.post("http://localhost:5001/api/admin/login", { password });
+      const res = await axios.post("/api/admin/login", { password });
       setToken(res.data.token);
       onSuccess();
     } catch (err) {
