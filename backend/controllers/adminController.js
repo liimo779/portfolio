@@ -83,6 +83,10 @@ const createResource = async (req, res) => {
   const values = config.columns.map((col) => {
     let val = req.body[col];
     
+    if (col === "title" && val === undefined) {
+      val = req.body["name"] ?? null;
+    }
+    
     if (col === "demo_url" && val === undefined) {
       val = req.body["live_url"] ?? null;
     }
@@ -144,8 +148,8 @@ const updateResource = async (req, res) => {
 
   const values = config.columns.map((col) => {
     let val = req.body[col];
-    if (col === "demo_url" && val === undefined) {
-      val = req.body["live_url"] ?? null;
+    if (col === "title" && val === undefined) {
+      val = req.body["name"] ?? null;
     }
     if (col === "featured") {
       val = val === true || val === 1 || val === "true" ? 1 : 0;

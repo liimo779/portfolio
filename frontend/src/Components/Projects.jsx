@@ -14,7 +14,7 @@ function Projects({ projects }) {
             المشاريع
           </RevealItem>
           <RevealItem as="p" className="section-subtitle">
-            مجموعة من المشاريع التي عكست فيها مهاراتي في بناء تطبيقات ويب Full-Stack.
+            
           </RevealItem>
         </RevealGroup>
 
