@@ -3,20 +3,6 @@ import { RevealGroup, RevealItem } from "./Reveal";
 import { useCountUp } from "../useCountUp";
 import "./About.css";
 
-function yearsOfExperience(experience) {
-  if (!experience || experience.length === 0) return 0;
-  const starts = experience
-    .map((exp) => exp.start_date)
-    .filter(Boolean)
-    .map((date) => new Date(date));
-
-  if (starts.length === 0) return 0;
-
-  const earliest = new Date(Math.min(...starts));
-  const years = (Date.now() - earliest.getTime()) / (1000 * 60 * 60 * 24 * 365);
-  return Math.max(1, Math.round(years));
-}
-
 function StatCard({ label, value, prefix = "" }) {
   const { ref, value: animated } = useCountUp(value);
 
@@ -33,7 +19,6 @@ function StatCard({ label, value, prefix = "" }) {
 
 function About({ profile, skills, projects, experience }) {
   const stats = [
-    { label: "سنوات خبرة", value: yearsOfExperience(experience), prefix: "+" },
     { label: "مشروع منجز", value: projects.length },
     { label: "مهارة تقنية", value: skills.length },
     { label: "انشطه", value: experience.length },

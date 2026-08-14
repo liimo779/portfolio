@@ -54,17 +54,17 @@ export const RESOURCES = {
     },
   },
   experience: {
-    title: "الخبرة العملية",
-    singular: "خبرة",
+    title: "الأنشطة",
+    singular: " نشاط ",
     displayColumns: [
       { key: "role", label: "المسمى" },
-      { key: "company", label: "الشركة" },
+      { key: "company", label: "الجهة المنظمة" },
       { key: "start_date", label: "من" },
       { key: "end_date", label: "إلى" },
     ],
     fields: [
-      { name: "company", label: "الشركة", type: "text", required: true },
-      { name: "role", label: "المسمى الوظيفي", type: "text", required: true },
+      { name: "company", label: " الجهة المنظمة", type: "text", required: true },
+      { name: "role", label: "المسمى", type: "text", required: true },
       { name: "description", label: "الوصف", type: "textarea" },
       { name: "location", label: "الموقع", type: "text" },
       { name: "start_date", label: "تاريخ البداية (YYYY-MM)", type: "text" },

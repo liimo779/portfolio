@@ -8,10 +8,10 @@ function Experience({ experience }) {
     <section id="experience" className="container">
       <RevealGroup className="section-head">
         <RevealItem as="span" className="section-eyebrow">
-          المسيرة المهنية
+         
         </RevealItem>
         <RevealItem as="h2" className="section-title">
-          الخبرة العملية
+          الأنشطة
         </RevealItem>
       </RevealGroup>
 
