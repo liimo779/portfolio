@@ -42,7 +42,7 @@ const createTables = async () => {
         description TEXT,
         tech_stack TEXT,
         github_url TEXT,
-        live_url TEXT,
+        demo_url TEXT,
         featured INTEGER DEFAULT 0,
         sort_order INTEGER DEFAULT 0
       )
