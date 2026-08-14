@@ -1,9 +1,11 @@
 const { Pool } = require('pg');
 
-// الاتصال بقاعدة البيانات باستخدام رابط PostgreSQL
+// الاتصال بقاعدة البيانات PostgreSQL باستخدام رابط الاتصال
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 module.exports = {
