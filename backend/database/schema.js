@@ -35,6 +35,7 @@ const createTables = async () => {
     // =========================
     // Projects
     // =========================
+    await db.query(`DROP TABLE IF EXISTS projects CASCADE;`);
     await db.query(`
       CREATE TABLE IF NOT EXISTS projects (
         id SERIAL PRIMARY KEY,
