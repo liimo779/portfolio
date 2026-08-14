@@ -15,7 +15,7 @@ const RESOURCES = {
       "description",
       "tech_stack",
       "github_url",
-      "demo_url", // تم التعديل إلى demo_url ليطابق الفرونت إند والـ Schema
+      "demo_url",
       "featured",
       "sort_order",
     ],
@@ -51,33 +51,46 @@ const RESOURCES = {
 const getResourceConfig = (resource) => RESOURCES[resource];
 
 // =========================
-// Create Resource (مُعدلة مع تحويل القيم الضمنية)
+// List Resource
 // =========================
+const listResource = async (req, res) => {
+  const config = getResourceConfig(req.params.resource);
 
+  if (!config) {
+    return res.status(404).json({ error: "مورد غير معروف" });
+  }
+
+  try {
+    const result = await db.query(
+      `SELECT * FROM ${config.table} ORDER BY ${config.orderBy}`
+    );
+    res.json(result.rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// =========================
+// Create Resource
+// =========================
 const createResource = async (req, res) => {
   const config = getResourceConfig(req.params.resource);
 
   if (!config) {
-    return res.status(404).json({
-      error: "مورد غير معروف",
-    });
+    return res.status(404).json({ error: "مورد غير معروف" });
   }
 
-  // تجهيز القيم مع معالجة حقول demo_url و featured و sort_order
   const values = config.columns.map((col) => {
     let val = req.body[col];
     
-    // دعم مسمى live_url أو demo_url تبادلياً
     if (col === "demo_url" && val === undefined) {
       val = req.body["live_url"] ?? null;
     }
 
-    // تحويل قيمة featured البولينية إلى رقم إذا كان العمود INTEGER
     if (col === "featured") {
       val = val === true || val === 1 || val === "true" ? 1 : 0;
     }
 
-    // تعيين قيمة افتراضية للـ sort_order
     if (col === "sort_order") {
       val = Number(val) || 0;
     }
@@ -108,8 +121,196 @@ const createResource = async (req, res) => {
     res.status(201).json(created.rows[0]);
   } catch (error) {
     console.error("Create Resource Error:", error);
-    res.status(500).json({
-      error: error.message,
-    });
+    res.status(500).json({ error: error.message });
   }
+};
+
+// =========================
+// Update Resource
+// =========================
+const updateResource = async (req, res) => {
+  const config = getResourceConfig(req.params.resource);
+
+  if (!config) {
+    return res.status(404).json({ error: "مورد غير معروف" });
+  }
+
+  const setClause = config.columns
+    .map((col, index) => `${col} = $${index + 1}`)
+    .join(", ");
+
+  const values = config.columns.map((col) => {
+    let val = req.body[col];
+    if (col === "demo_url" && val === undefined) {
+      val = req.body["live_url"] ?? null;
+    }
+    if (col === "featured") {
+      val = val === true || val === 1 || val === "true" ? 1 : 0;
+    }
+    if (col === "sort_order") {
+      val = Number(val) || 0;
+    }
+    return val ?? null;
+  });
+
+  try {
+    const result = await db.query(
+      `
+      UPDATE ${config.table}
+      SET ${setClause}
+      WHERE id = $${config.columns.length + 1}
+      `,
+      [...values, req.params.id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "العنصر غير موجود" });
+    }
+
+    const updated = await db.query(
+      `SELECT * FROM ${config.table} WHERE id = $1`,
+      [req.params.id]
+    );
+
+    res.json(updated.rows[0]);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// =========================
+// Delete Resource
+// =========================
+const deleteResource = async (req, res) => {
+  const config = getResourceConfig(req.params.resource);
+
+  if (!config) {
+    return res.status(404).json({ error: "مورد غير معروف" });
+  }
+
+  try {
+    const result = await db.query(
+      `DELETE FROM ${config.table} WHERE id = $1`,
+      [req.params.id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "العنصر غير موجود" });
+    }
+
+    res.status(204).end();
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// =========================
+// Profile
+// =========================
+const PROFILE_COLUMNS = [
+  "name",
+  "title",
+  "bio",
+  "email",
+  "phone",
+  "location",
+  "github_url",
+  "linkedin_url",
+  "resume_url",
+];
+
+const getProfileAdmin = async (req, res) => {
+  try {
+    const result = await db.query(`SELECT * FROM profile LIMIT 1`);
+    res.json(result.rows[0] || null);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const updateProfileAdmin = async (req, res) => {
+  const values = PROFILE_COLUMNS.map((col) => req.body[col] ?? null);
+
+  try {
+    const existingResult = await db.query(`SELECT id FROM profile LIMIT 1`);
+    const existing = existingResult.rows[0];
+
+    if (existing) {
+      const setClause = PROFILE_COLUMNS
+        .map((col, index) => `${col} = $${index + 1}`)
+        .join(", ");
+
+      await db.query(
+        `
+        UPDATE profile
+        SET ${setClause}
+        WHERE id = $${PROFILE_COLUMNS.length + 1}
+        `,
+        [...values, existing.id]
+      );
+    } else {
+      const placeholders = PROFILE_COLUMNS
+        .map((_, index) => `$${index + 1}`)
+        .join(", ");
+
+      await db.query(
+        `
+        INSERT INTO profile (${PROFILE_COLUMNS.join(", ")})
+        VALUES (${placeholders})
+        RETURNING id
+        `,
+        values
+      );
+    }
+
+    const updated = await db.query(`SELECT * FROM profile LIMIT 1`);
+    res.json(updated.rows[0]);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// =========================
+// Messages
+// =========================
+const listMessages = async (req, res) => {
+  try {
+    const result = await db.query(
+      `SELECT * FROM messages ORDER BY created_at DESC`
+    );
+    res.json(result.rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const deleteMessage = async (req, res) => {
+  try {
+    const result = await db.query(
+      `DELETE FROM messages WHERE id = $1`,
+      [req.params.id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "الرسالة غير موجودة" });
+    }
+
+    res.status(204).end();
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// =========================
+// Export
+// =========================
+module.exports = {
+  listResource,
+  createResource,
+  updateResource,
+  deleteResource,
+  getProfileAdmin,
+  updateProfileAdmin,
+  listMessages,
+  deleteMessage,
 };
