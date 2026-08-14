@@ -89,22 +89,26 @@ const projectsList = [
 ];
 
 // =========================
-// Student Experience
+// Experience
 // =========================
 
 const experienceList = [
   {
-    title: "هاكثون برمجي",
-    type: "Hackathon",
+    company: "Hackathon",
+    role: "هاكثون برمجي",
     description: "المشاركة في تطوير مشروع تقني والعمل ضمن فريق لحل مشكلة واقعية.",
-    date: "2026",
+    location: "",
+    start_date: "2026",
+    end_date: "2026",
     sort_order: 1
   },
   {
-    title: "مسابقة برمجة",
-    type: "Competition",
+    company: "Competition",
+    role: "مسابقة برمجة",
     description: "المشاركة في مسابقة برمجية وتطبيق مهارات حل المشكلات والبرمجة.",
-    date: "2026",
+    location: "",
+    start_date: "2026",
+    end_date: "2026",
     sort_order: 2
   }
 ];
@@ -219,10 +223,12 @@ const insertSampleData = async () => {
     await insertMany(
       "experience",
       [
-        "title",
-        "type",
+        "company",
+        "role",
         "description",
-        "date",
+        "location",
+        "start_date",
+        "end_date",
         "sort_order"
       ],
       experienceList

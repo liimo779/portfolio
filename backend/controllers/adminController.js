@@ -24,7 +24,6 @@ const RESOURCES = {
  experience: {
     table: "experience",
     columns: [
-      "title",
       "company",
       "role",
       "description",

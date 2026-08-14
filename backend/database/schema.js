@@ -50,16 +50,18 @@ const createTables = async () => {
     `);
 
     // =========================
-    // Experience / Student Activities
+    // Experience
     // =========================
     await db.query(`DROP TABLE IF EXISTS experience;`);
     await db.query(`
        CREATE TABLE IF NOT EXISTS experience (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT,
-    type TEXT,
+    company TEXT,
+    role TEXT,
     description TEXT,
-    date TEXT,
+    location TEXT,
+    start_date TEXT,
+    end_date TEXT,
     sort_order INTEGER DEFAULT 0
     );
   `);
