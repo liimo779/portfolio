@@ -206,7 +206,7 @@ const insertSampleData = async () => {
         "description",
         "tech_stack",
         "github_url",
-        "live_url",
+        "demo_url ",
         "featured",
         "sort_order"
       ],

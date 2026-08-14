@@ -94,6 +94,9 @@ const createResource = async (req, res) => {
     if (col === "sort_order") {
       val = Number(val) || 0;
     }
+    if (col === "tech_stack" && Array.isArray(val)) {
+      val = val.join(", ");
+    }
 
     return val ?? null;
   });
@@ -149,6 +152,9 @@ const updateResource = async (req, res) => {
     }
     if (col === "sort_order") {
       val = Number(val) || 0;
+    }
+    if (col === "tech_stack" && Array.isArray(val)) {
+      val = val.join(", ");
     }
     return val ?? null;
   });
