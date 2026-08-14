@@ -8,7 +8,7 @@ const LINKS = [
   { id: "about", label: "نبذة" },
   { id: "skills", label: "المهارات" },
   { id: "projects", label: "المشاريع" },
-  { id: "experience", label: "الخبرة" },
+  { id: "experience", label: " الانشطة" },
   { id: "education", label: "التعليم" },
   { id: "contact", label: "تواصل" },
 ];

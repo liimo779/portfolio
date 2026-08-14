@@ -9,7 +9,7 @@ const TABS = [
   { id: "profile", label: "الملف الشخصي" },
   { id: "skills", label: "المهارات" },
   { id: "projects", label: "المشاريع" },
-  { id: "experience", label: "الخبرة" },
+  { id: "experience", label: " الانشطة" },
   { id: "education", label: "التعليم" },
   { id: "messages", label: "الرسائل" },
 ];
