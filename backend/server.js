@@ -1,6 +1,4 @@
 require("dotenv").config({ path: require("path").join(__dirname, ".env") });
-require("./database/schema");
-require("./database/sample_data");
 
 const express = require("express");
 const cors = require("cors");
