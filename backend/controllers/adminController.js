@@ -1,4 +1,4 @@
-const { run, get, all } = require("../utils/db");
+const db = require("../utils/db");
 
 // الموارد القابلة للإدارة
 const RESOURCES = {
@@ -64,11 +64,11 @@ const listResource = async (req, res) => {
   }
 
   try {
-    const rows = await all(
+    const result = await db.query(
       `SELECT * FROM ${config.table} ORDER BY ${config.orderBy}`
     );
 
-    res.json(rows);
+    res.json(result.rows);
   } catch (error) {
     res.status(500).json({
       error: error.message,
@@ -98,7 +98,7 @@ const createResource = async (req, res) => {
     .join(", ");
 
   try {
-    const result = await run(
+    const result = await db.query(
       `
       INSERT INTO ${config.table}
       (${config.columns.join(", ")})
@@ -108,12 +108,12 @@ const createResource = async (req, res) => {
       values
     );
 
-    const created = await get(
+    const created = await db.query(
       `SELECT * FROM ${config.table} WHERE id = $1`,
       [result.rows[0].id]
     );
 
-    res.status(201).json(created);
+    res.status(201).json(created.rows[0]);
   } catch (error) {
     res.status(500).json({
       error: error.message,
@@ -143,7 +143,7 @@ const updateResource = async (req, res) => {
   );
 
   try {
-    const result = await run(
+    const result = await db.query(
       `
       UPDATE ${config.table}
       SET ${setClause}
@@ -158,12 +158,12 @@ const updateResource = async (req, res) => {
       });
     }
 
-    const updated = await get(
+    const updated = await db.query(
       `SELECT * FROM ${config.table} WHERE id = $1`,
       [req.params.id]
     );
 
-    res.json(updated);
+    res.json(updated.rows[0]);
   } catch (error) {
     res.status(500).json({
       error: error.message,
@@ -185,7 +185,7 @@ const deleteResource = async (req, res) => {
   }
 
   try {
-    const result = await run(
+    const result = await db.query(
       `DELETE FROM ${config.table} WHERE id = $1`,
       [req.params.id]
     );
@@ -222,11 +222,11 @@ const PROFILE_COLUMNS = [
 
 const getProfileAdmin = async (req, res) => {
   try {
-    const row = await get(
+    const result = await db.query(
       `SELECT * FROM profile LIMIT 1`
     );
 
-    res.json(row || null);
+    res.json(result.rows[0] || null);
   } catch (error) {
     res.status(500).json({
       error: error.message,
@@ -240,16 +240,18 @@ const updateProfileAdmin = async (req, res) => {
   );
 
   try {
-    const existing = await get(
+    const existingResult = await db.query(
       `SELECT id FROM profile LIMIT 1`
     );
+
+    const existing = existingResult.rows[0];
 
     if (existing) {
       const setClause = PROFILE_COLUMNS
         .map((col, index) => `${col} = $${index + 1}`)
         .join(", ");
 
-      await run(
+      await db.query(
         `
         UPDATE profile
         SET ${setClause}
@@ -262,7 +264,7 @@ const updateProfileAdmin = async (req, res) => {
         .map((_, index) => `$${index + 1}`)
         .join(", ");
 
-      await run(
+      await db.query(
         `
         INSERT INTO profile (${PROFILE_COLUMNS.join(", ")})
         VALUES (${placeholders})
@@ -272,11 +274,11 @@ const updateProfileAdmin = async (req, res) => {
       );
     }
 
-    const updated = await get(
+    const updated = await db.query(
       `SELECT * FROM profile LIMIT 1`
     );
 
-    res.json(updated);
+    res.json(updated.rows[0]);
   } catch (error) {
     res.status(500).json({
       error: error.message,
@@ -290,11 +292,11 @@ const updateProfileAdmin = async (req, res) => {
 
 const listMessages = async (req, res) => {
   try {
-    const rows = await all(
+    const result = await db.query(
       `SELECT * FROM messages ORDER BY created_at DESC`
     );
 
-    res.json(rows);
+    res.json(result.rows);
   } catch (error) {
     res.status(500).json({
       error: error.message,
@@ -304,7 +306,7 @@ const listMessages = async (req, res) => {
 
 const deleteMessage = async (req, res) => {
   try {
-    const result = await run(
+    const result = await db.query(
       `DELETE FROM messages WHERE id = $1`,
       [req.params.id]
     );
