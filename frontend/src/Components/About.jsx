@@ -36,7 +36,7 @@ function About({ profile, skills, projects, experience }) {
     { label: "سنوات خبرة", value: yearsOfExperience(experience), prefix: "+" },
     { label: "مشروع منجز", value: projects.length },
     { label: "مهارة تقنية", value: skills.length },
-    { label: "خبرة عملية", value: experience.length },
+    { label: "انشطه", value: experience.length },
   ];
 
   return (
