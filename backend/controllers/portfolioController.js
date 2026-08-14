@@ -6,11 +6,11 @@ const db = require("../utils/db");
 
 const getProfile = async (req, res) => {
   try {
-    const row = await db.get(
+    const row = await db.query(
       `SELECT * FROM profile LIMIT 1`
     );
 
-    res.json(row);
+    res.json(row.rows[0]);
   } catch (err) {
     res.status(500).json({
       error: err.message,
@@ -24,11 +24,11 @@ const getProfile = async (req, res) => {
 
 const getSkills = async (req, res) => {
   try {
-    const rows = await db.all(
+    const rows = await db.query(
       `SELECT * FROM skills`
     );
 
-    res.json(rows);
+    res.json(rows.rows);
   } catch (err) {
     res.status(500).json({
       error: err.message,
@@ -42,11 +42,11 @@ const getSkills = async (req, res) => {
 
 const getProjects = async (req, res) => {
   try {
-    const rows = await db.all(
+    const rows = await db.query(
       `SELECT * FROM projects ORDER BY sort_order ASC, id ASC`
     );
 
-    res.json(rows);
+    res.json(rows.rows);
   } catch (err) {
     res.status(500).json({
       error: err.message,
@@ -60,11 +60,11 @@ const getProjects = async (req, res) => {
 
 const getExperience = async (req, res) => {
   try {
-    const rows = await db.all(
+    const rows = await db.query(
       `SELECT * FROM experience ORDER BY sort_order ASC, id ASC`
     );
 
-    res.json(rows);
+    res.json(rows.rows);
   } catch (err) {
     res.status(500).json({
       error: err.message,
@@ -78,11 +78,11 @@ const getExperience = async (req, res) => {
 
 const getEducation = async (req, res) => {
   try {
-    const rows = await db.all(
+    const rows = await db.query(
       `SELECT * FROM education ORDER BY sort_order ASC, id ASC`
     );
 
-    res.json(rows);
+    res.json(rows.rows);
   } catch (err) {
     res.status(500).json({
       error: err.message,
@@ -104,7 +104,7 @@ const createMessage = async (req, res) => {
   }
 
   try {
-    const result = await db.run(
+    const result = await db.query(
       `
       INSERT INTO messages (name, email, message)
       VALUES ($1, $2, $3)
