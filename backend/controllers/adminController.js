@@ -1,92 +1,213 @@
 const { run, get, all } = require("../utils/db");
 
-// تعريف الموارد القابلة لإدارتها عبر نفس الأكواد العامة (Skills / Projects / Experience / Education)
+// الموارد القابلة للإدارة
 const RESOURCES = {
   skills: {
     table: "skills",
     columns: ["name", "category", "level"],
     orderBy: "id ASC",
   },
+
   projects: {
     table: "projects",
-    columns: ["title", "description", "tech_stack", "github_url", "live_url", "featured", "sort_order"],
+    columns: [
+      "title",
+      "description",
+      "tech_stack",
+      "github_url",
+      "live_url",
+      "featured",
+      "sort_order",
+    ],
     orderBy: "sort_order ASC, id ASC",
   },
+
   experience: {
     table: "experience",
-    columns: ["company", "role", "description", "location", "start_date", "end_date", "sort_order"],
+    columns: [
+      "title",
+      "type",
+      "description",
+      "date",
+      "sort_order",
+    ],
     orderBy: "sort_order ASC, id ASC",
   },
+
   education: {
     table: "education",
-    columns: ["institution", "degree", "field", "start_date", "end_date", "sort_order"],
+    columns: [
+      "institution",
+      "degree",
+      "field",
+      "start_date",
+      "end_date",
+      "sort_order",
+    ],
     orderBy: "sort_order ASC, id ASC",
   },
 };
 
 const getResourceConfig = (resource) => RESOURCES[resource];
 
+// =========================
+// List Resource
+// =========================
+
 const listResource = async (req, res) => {
   const config = getResourceConfig(req.params.resource);
-  if (!config) return res.status(404).json({ error: "مورد غير معروف" });
+
+  if (!config) {
+    return res.status(404).json({
+      error: "مورد غير معروف",
+    });
+  }
 
   try {
-    const rows = await all(`SELECT * FROM ${config.table} ORDER BY ${config.orderBy}`);
+    const rows = await all(
+      `SELECT * FROM ${config.table} ORDER BY ${config.orderBy}`
+    );
+
     res.json(rows);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      error: error.message,
+    });
   }
 };
+
+// =========================
+// Create Resource
+// =========================
 
 const createResource = async (req, res) => {
   const config = getResourceConfig(req.params.resource);
-  if (!config) return res.status(404).json({ error: "مورد غير معروف" });
 
-  const values = config.columns.map((col) => req.body[col] ?? null);
-  const placeholders = config.columns.map(() => "?").join(", ");
+  if (!config) {
+    return res.status(404).json({
+      error: "مورد غير معروف",
+    });
+  }
+
+  const values = config.columns.map(
+    (col) => req.body[col] ?? null
+  );
+
+  const placeholders = config.columns
+    .map((_, index) => `$${index + 1}`)
+    .join(", ");
 
   try {
     const result = await run(
-      `INSERT INTO ${config.table} (${config.columns.join(", ")}) VALUES (${placeholders})`,
+      `
+      INSERT INTO ${config.table}
+      (${config.columns.join(", ")})
+      VALUES (${placeholders})
+      RETURNING id
+      `,
       values
     );
-    const created = await get(`SELECT * FROM ${config.table} WHERE id = ?`, [result.lastID]);
+
+    const created = await get(
+      `SELECT * FROM ${config.table} WHERE id = $1`,
+      [result.rows[0].id]
+    );
+
     res.status(201).json(created);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      error: error.message,
+    });
   }
 };
+
+// =========================
+// Update Resource
+// =========================
 
 const updateResource = async (req, res) => {
   const config = getResourceConfig(req.params.resource);
-  if (!config) return res.status(404).json({ error: "مورد غير معروف" });
 
-  const setClause = config.columns.map((col) => `${col} = ?`).join(", ");
-  const values = config.columns.map((col) => req.body[col] ?? null);
+  if (!config) {
+    return res.status(404).json({
+      error: "مورد غير معروف",
+    });
+  }
+
+  const setClause = config.columns
+    .map((col, index) => `${col} = $${index + 1}`)
+    .join(", ");
+
+  const values = config.columns.map(
+    (col) => req.body[col] ?? null
+  );
 
   try {
-    await run(`UPDATE ${config.table} SET ${setClause} WHERE id = ?`, [...values, req.params.id]);
-    const updated = await get(`SELECT * FROM ${config.table} WHERE id = ?`, [req.params.id]);
-    if (!updated) return res.status(404).json({ error: "العنصر غير موجود" });
+    const result = await run(
+      `
+      UPDATE ${config.table}
+      SET ${setClause}
+      WHERE id = $${config.columns.length + 1}
+      `,
+      [...values, req.params.id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        error: "العنصر غير موجود",
+      });
+    }
+
+    const updated = await get(
+      `SELECT * FROM ${config.table} WHERE id = $1`,
+      [req.params.id]
+    );
+
     res.json(updated);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      error: error.message,
+    });
   }
 };
+
+// =========================
+// Delete Resource
+// =========================
 
 const deleteResource = async (req, res) => {
   const config = getResourceConfig(req.params.resource);
-  if (!config) return res.status(404).json({ error: "مورد غير معروف" });
+
+  if (!config) {
+    return res.status(404).json({
+      error: "مورد غير معروف",
+    });
+  }
 
   try {
-    await run(`DELETE FROM ${config.table} WHERE id = ?`, [req.params.id]);
+    const result = await run(
+      `DELETE FROM ${config.table} WHERE id = $1`,
+      [req.params.id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        error: "العنصر غير موجود",
+      });
+    }
+
     res.status(204).end();
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      error: error.message,
+    });
   }
 };
 
-// الملف الشخصي: صف واحد فقط، تعديل بدل إنشاء/حذف
+// =========================
+// Profile
+// =========================
+
 const PROFILE_COLUMNS = [
   "name",
   "title",
@@ -101,52 +222,110 @@ const PROFILE_COLUMNS = [
 
 const getProfileAdmin = async (req, res) => {
   try {
-    const row = await get(`SELECT * FROM profile LIMIT 1`);
+    const row = await get(
+      `SELECT * FROM profile LIMIT 1`
+    );
+
     res.json(row || null);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      error: error.message,
+    });
   }
 };
 
 const updateProfileAdmin = async (req, res) => {
-  const values = PROFILE_COLUMNS.map((col) => req.body[col] ?? null);
+  const values = PROFILE_COLUMNS.map(
+    (col) => req.body[col] ?? null
+  );
 
   try {
-    const existing = await get(`SELECT id FROM profile LIMIT 1`);
+    const existing = await get(
+      `SELECT id FROM profile LIMIT 1`
+    );
 
     if (existing) {
-      const setClause = PROFILE_COLUMNS.map((col) => `${col} = ?`).join(", ");
-      await run(`UPDATE profile SET ${setClause} WHERE id = ?`, [...values, existing.id]);
+      const setClause = PROFILE_COLUMNS
+        .map((col, index) => `${col} = $${index + 1}`)
+        .join(", ");
+
+      await run(
+        `
+        UPDATE profile
+        SET ${setClause}
+        WHERE id = $${PROFILE_COLUMNS.length + 1}
+        `,
+        [...values, existing.id]
+      );
     } else {
-      const placeholders = PROFILE_COLUMNS.map(() => "?").join(", ");
-      await run(`INSERT INTO profile (${PROFILE_COLUMNS.join(", ")}) VALUES (${placeholders})`, values);
+      const placeholders = PROFILE_COLUMNS
+        .map((_, index) => `$${index + 1}`)
+        .join(", ");
+
+      await run(
+        `
+        INSERT INTO profile (${PROFILE_COLUMNS.join(", ")})
+        VALUES (${placeholders})
+        RETURNING id
+        `,
+        values
+      );
     }
 
-    const updated = await get(`SELECT * FROM profile LIMIT 1`);
+    const updated = await get(
+      `SELECT * FROM profile LIMIT 1`
+    );
+
     res.json(updated);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      error: error.message,
+    });
   }
 };
 
-// رسائل التواصل: عرض وحذف فقط (المصدر هو نموذج التواصل بالموقع)
+// =========================
+// Messages
+// =========================
+
 const listMessages = async (req, res) => {
   try {
-    const rows = await all(`SELECT * FROM messages ORDER BY created_at DESC`);
+    const rows = await all(
+      `SELECT * FROM messages ORDER BY created_at DESC`
+    );
+
     res.json(rows);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      error: error.message,
+    });
   }
 };
 
 const deleteMessage = async (req, res) => {
   try {
-    await run(`DELETE FROM messages WHERE id = ?`, [req.params.id]);
+    const result = await run(
+      `DELETE FROM messages WHERE id = $1`,
+      [req.params.id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        error: "الرسالة غير موجودة",
+      });
+    }
+
     res.status(204).end();
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      error: error.message,
+    });
   }
 };
+
+// =========================
+// Export
+// =========================
 
 module.exports = {
   listResource,

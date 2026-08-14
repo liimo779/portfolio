@@ -1,144 +1,140 @@
-const db = require("../config/db");
+const db = require("../utils/db");
 
+// =========================
+// Profile
+// =========================
 
-const getProfile = (req, res) => {
-
-    db.get(
-       `SELECT * FROM profile LIMIT 1`,
-        [],
-        (err, row) => {
-
-            if (err) {
-                return res.status(500).json({
-                    error: err.message
-                });
-            }
-
-            res.json(row);
-        }
+const getProfile = async (req, res) => {
+  try {
+    const row = await db.get(
+      `SELECT * FROM profile LIMIT 1`
     );
 
+    res.json(row);
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
 };
 
+// =========================
+// Skills
+// =========================
 
-const getSkills = (req, res) => {
-
-    db.all(
-        `SELECT * FROM skills`,
-        [],
-        (err, rows) => {
-
-            if (err) {
-                return res.status(500).json({
-                    error: err.message
-                });
-            }
-
-            res.json(rows);
-        }
+const getSkills = async (req, res) => {
+  try {
+    const rows = await db.all(
+      `SELECT * FROM skills`
     );
 
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
 };
 
+// =========================
+// Projects
+// =========================
 
-const getProjects = (req, res) => {
-
-    db.all(
-        `SELECT * FROM projects ORDER BY sort_order ASC, id ASC`,
-        [],
-        (err, rows) => {
-
-            if (err) {
-                return res.status(500).json({
-                    error: err.message
-                });
-            }
-
-            res.json(rows);
-        }
+const getProjects = async (req, res) => {
+  try {
+    const rows = await db.all(
+      `SELECT * FROM projects ORDER BY sort_order ASC, id ASC`
     );
 
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
 };
 
+// =========================
+// Experience
+// =========================
 
-const getExperience = (req, res) => {
-
-    db.all(
-        `SELECT * FROM experience ORDER BY sort_order ASC, id ASC`,
-        [],
-        (err, rows) => {
-
-            if (err) {
-                return res.status(500).json({
-                    error: err.message
-                });
-            }
-
-            res.json(rows);
-        }
+const getExperience = async (req, res) => {
+  try {
+    const rows = await db.all(
+      `SELECT * FROM experience ORDER BY sort_order ASC, id ASC`
     );
 
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
 };
 
+// =========================
+// Education
+// =========================
 
-const getEducation = (req, res) => {
-
-    db.all(
-        `SELECT * FROM education ORDER BY sort_order ASC, id ASC`,
-        [],
-        (err, rows) => {
-
-            if (err) {
-                return res.status(500).json({
-                    error: err.message
-                });
-            }
-
-            res.json(rows);
-        }
+const getEducation = async (req, res) => {
+  try {
+    const rows = await db.all(
+      `SELECT * FROM education ORDER BY sort_order ASC, id ASC`
     );
 
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
 };
 
+// =========================
+// Messages
+// =========================
 
-const createMessage = (req, res) => {
+const createMessage = async (req, res) => {
+  const { name, email, message } = req.body;
 
-    const { name, email, message } = req.body;
+  if (!name || !email || !message) {
+    return res.status(400).json({
+      error: "الاسم والبريد الإلكتروني والرسالة كلها مطلوبة",
+    });
+  }
 
-    if (!name || !email || !message) {
-        return res.status(400).json({
-            error: "الاسم والبريد الإلكتروني والرسالة كلها مطلوبة"
-        });
-    }
-
-    db.run(
-        `INSERT INTO messages (name, email, message) VALUES (?, ?, ?)`,
-        [name, email, message],
-        function (err) {
-
-            if (err) {
-                return res.status(500).json({
-                    error: err.message
-                });
-            }
-
-            res.status(201).json({
-                id: this.lastID,
-                name,
-                email,
-                message
-            });
-        }
+  try {
+    const result = await db.run(
+      `
+      INSERT INTO messages (name, email, message)
+      VALUES ($1, $2, $3)
+      RETURNING id
+      `,
+      [name, email, message]
     );
 
+    res.status(201).json({
+      id: result.rows[0].id,
+      name,
+      email,
+      message,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
 };
 
+// =========================
+// Export
+// =========================
 
 module.exports = {
-    getProfile,
-    getSkills,
-    getProjects,
-    getExperience,
-    getEducation,
-    createMessage
+  getProfile,
+  getSkills,
+  getProjects,
+  getExperience,
+  getEducation,
+  createMessage,
 };

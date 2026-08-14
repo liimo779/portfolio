@@ -1,27 +1,33 @@
 const db = require("../config/db");
 
-const run = (sql, params = []) =>
-  new Promise((resolve, reject) => {
-    db.run(sql, params, function (err) {
-      if (err) reject(err);
-      else resolve(this);
-    });
+const convertPlaceholders = (sql) => {
+  let index = 0;
+  return sql.replace(/\?/g, () => {
+    index++;
+    return `$${index}`;
   });
+};
 
-const get = (sql, params = []) =>
-  new Promise((resolve, reject) => {
-    db.get(sql, params, (err, row) => {
-      if (err) reject(err);
-      else resolve(row);
-    });
-  });
+const run = async (sql, params = []) => {
+  const query = convertPlaceholders(sql);
+  const result = await db.query(query, params);
+  return result; // يرجع كائن نتيجة pg بالكامل (يشمل rows و rowCount)
+};
 
-const all = (sql, params = []) =>
-  new Promise((resolve, reject) => {
-    db.all(sql, params, (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows);
-    });
-  });
+const get = async (sql, params = []) => {
+  const query = convertPlaceholders(sql);
+  const result = await db.query(query, params);
+  return result.rows[0];
+};
 
-module.exports = { run, get, all };
+const all = async (sql, params = []) => {
+  const query = convertPlaceholders(sql);
+  const result = await db.query(query, params);
+  return result.rows;
+};
+
+module.exports = {
+  run,
+  get,
+  all,
+};

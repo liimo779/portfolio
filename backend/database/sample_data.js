@@ -1,14 +1,8 @@
 const db = require("../config/db");
 
-// دالة مساعدة لتحويل db.run إلى Promise
-const runQuery = (db, sql, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.run(sql, params, function (err) {
-      if (err) reject(err);
-      else resolve(this);
-    });
-  });
-};
+// =========================
+// Profile
+// =========================
 
 const profile = {
   name: "Lamar",
@@ -22,9 +16,11 @@ const profile = {
   resume_url: ""
 };
 
-// قائمة المهارات للـ CV
+// =========================
+// Skills
+// =========================
+
 const skillsList = [
-  // Web Development & Backend
   { name: "JavaScript", category: "Web Development", level: 85 },
   { name: "Node.js", category: "Backend Development", level: 80 },
   { name: "Express.js", category: "Backend Development", level: 80 },
@@ -32,28 +28,29 @@ const skillsList = [
   { name: "HTML5 & CSS3", category: "Frontend Development", level: 90 },
   { name: "RESTful APIs", category: "Backend Development", level: 85 },
 
-  // Database & Data Analysis
   { name: "SQL & Relational Databases", category: "Database", level: 85 },
-  { name: "SQLite", category: "Database", level: 85 },
+  { name: "PostgreSQL", category: "Database", level: 80 },
   { name: "Data Analysis", category: "Data Science", level: 75 },
 
-  // Tools & Methodologies
   { name: "Git & GitHub", category: "Developer Tools", level: 80 },
   { name: "Postman", category: "Developer Tools", level: 80 },
   { name: "VS Code", category: "Developer Tools", level: 90 },
 
-  // Soft Skills
   { name: "Problem Solving", category: "Soft Skills", level: 90 },
   { name: "Teamwork & Collaboration", category: "Soft Skills", level: 85 },
   { name: "Time Management", category: "Soft Skills", level: 85 }
 ];
 
-// مشاريع نموذجية للعرض في البورتفوليو
+// =========================
+// Projects
+// =========================
+
 const projectsList = [
   {
     title: "منصة إدارة المهام",
-    description: "تطبيق ويب لإدارة المهام والمشاريع الجماعية، يدعم إنشاء لوحات، تعيين مهام لأعضاء الفريق، وتتبع الحالة في الوقت الفعلي.",
-    tech_stack: "React, Node.js, Express, SQLite",
+    description:
+      "تطبيق ويب لإدارة المهام والمشاريع الجماعية، يدعم إنشاء لوحات، تعيين مهام لأعضاء الفريق، وتتبع الحالة في الوقت الفعلي.",
+    tech_stack: "React, Node.js, Express, PostgreSQL",
     github_url: "https://github.com/liimo779/task-manager",
     live_url: "",
     featured: 1,
@@ -61,8 +58,9 @@ const projectsList = [
   },
   {
     title: "متجر إلكتروني - API",
-    description: "واجهة برمجية (REST API) متكاملة لمتجر إلكتروني تشمل إدارة المنتجات، السلة، الطلبات، والمصادقة عبر JWT.",
-    tech_stack: "Node.js, Express, SQLite, JWT",
+    description:
+      "واجهة برمجية (REST API) متكاملة لمتجر إلكتروني تشمل إدارة المنتجات، السلة، الطلبات، والمصادقة عبر JWT.",
+    tech_stack: "Node.js, Express, PostgreSQL, JWT",
     github_url: "https://github.com/liimo779/ecommerce-api",
     live_url: "",
     featured: 1,
@@ -70,7 +68,8 @@ const projectsList = [
   },
   {
     title: "لوحة تحكم لعرض بيانات الطقس",
-    description: "لوحة تحكم تفاعلية تعرض بيانات الطقس المباشرة لأكثر من مدينة، مع رسوم بيانية لتوقعات درجات الحرارة.",
+    description:
+      "لوحة تحكم تفاعلية تعرض بيانات الطقس المباشرة لأكثر من مدينة، مع رسوم بيانية لتوقعات درجات الحرارة.",
     tech_stack: "React, Chart.js, REST API",
     github_url: "https://github.com/liimo779/weather-dashboard",
     live_url: "",
@@ -79,8 +78,9 @@ const projectsList = [
   },
   {
     title: "هذا البورتفوليو",
-    description: "موقع البورتفوليو الشخصي هذا، مبني بمعمارية Full-Stack مع لوحة بيانات ديناميكية بدل المحتوى الثابت.",
-    tech_stack: "React, Vite, Node.js, Express, SQLite",
+    description:
+      "موقع البورتفوليو الشخصي هذا، مبني بمعمارية Full-Stack مع لوحة بيانات ديناميكية بدل المحتوى الثابت.",
+    tech_stack: "React, Vite, Node.js, Express, PostgreSQL",
     github_url: "https://github.com/liimo779/portfolio",
     live_url: "",
     featured: 1,
@@ -88,70 +88,92 @@ const projectsList = [
   }
 ];
 
-// الخبرات العملية
+// =========================
+// Student Experience
+// =========================
+
 const experienceList = [
   {
-    company: "شركة تقنية مستقلة (عمل حر)",
-    role: "مطور ويب Full-Stack",
-    description: "تصميم وتطوير تطبيقات ويب متكاملة لعملاء متنوعين، بدءًا من واجهات المستخدم وصولًا إلى الواجهات البرمجية وقواعد البيانات.",
-    location: "عن بُعد",
-    start_date: "2024-01",
-    end_date: null,
+    title: "هاكثون برمجي",
+    type: "Hackathon",
+    description: "المشاركة في تطوير مشروع تقني والعمل ضمن فريق لحل مشكلة واقعية.",
+    date: "2026",
     sort_order: 1
   },
   {
-    company: "مشروع تدريبي / بوت كامب",
-    role: "مطور ويب متدرب",
-    description: "بناء مشاريع عملية باستخدام JavaScript وReact وNode.js ضمن برنامج تدريبي مكثف في تطوير الويب.",
-    location: "الرياض، السعودية",
-    start_date: "2023-06",
-    end_date: "2023-12",
+    title: "مسابقة برمجة",
+    type: "Competition",
+    description: "المشاركة في مسابقة برمجية وتطبيق مهارات حل المشكلات والبرمجة.",
+    date: "2026",
     sort_order: 2
   }
 ];
 
-// المؤهلات الدراسية
+// =========================
+// Education
+// =========================
+
 const educationList = [
   {
     institution: "جامعة (اسم الجهة التعليمية)",
     degree: "بكالوريوس",
-    field: "علوم الحاسب / تقنية المعلومات",
+    field: "نظم المعلومات",
     start_date: "2020-09",
     end_date: "2024-06",
     sort_order: 1
   }
 ];
 
+// =========================
+// Insert Many
+// =========================
+
 const insertMany = async (table, columns, rows) => {
-  const placeholders = columns.map(() => "?").join(", ");
   for (const row of rows) {
-    await runQuery(
-      db,
-      `INSERT INTO ${table} (${columns.join(", ")}) VALUES (${placeholders})`,
-      columns.map((col) => row[col])
+    const values = columns.map((column) => row[column]);
+
+    const placeholders = columns
+      .map((_, index) => `$${index + 1}`)
+      .join(", ");
+
+    await db.query(
+      `
+      INSERT INTO ${table} (${columns.join(", ")})
+      VALUES (${placeholders})
+      `,
+      values
     );
   }
 };
 
-// الجداول اللي تُعبّى ببيانات نموذجية (باستثناء messages، لأنها رسائل حقيقية من زوار الموقع)
-const seededTables = ["profile", "skills", "projects", "experience", "education"];
-
-const clearSampleTables = async () => {
-  for (const table of seededTables) {
-    await runQuery(db, `DELETE FROM ${table}`);
-    await runQuery(db, `DELETE FROM sqlite_sequence WHERE name = ?`, [table]);
-  }
-};
+// =========================
+// Insert Sample Data
+// =========================
 
 const insertSampleData = async () => {
   try {
-    console.log("جاري حذف البيانات الحالية...");
-    await clearSampleTables();
-
     console.log("جاري إدخال بيانات البروفايل...");
-    await runQuery(
-      db,
-      `INSERT INTO profile (name, title, bio, email, phone, location, github_url, linkedin_url, resume_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+
+    await db.query(`
+      DELETE FROM profile
+    `);
+
+    await db.query(
+      `
+      INSERT INTO profile
+      (
+        name,
+        title,
+        bio,
+        email,
+        phone,
+        location,
+        github_url,
+        linkedin_url,
+        resume_url
+      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      `,
       [
         profile.name,
         profile.title,
@@ -166,34 +188,68 @@ const insertSampleData = async () => {
     );
 
     console.log("جاري إدخال المهارات...");
-    await insertMany("skills", ["name", "category", "level"], skillsList);
+
+    await db.query(`DELETE FROM skills`);
+    await insertMany(
+      "skills",
+      ["name", "category", "level"],
+      skillsList
+    );
 
     console.log("جاري إدخال المشاريع...");
+
+    await db.query(`DELETE FROM projects`);
     await insertMany(
       "projects",
-      ["title", "description", "tech_stack", "github_url", "live_url", "featured", "sort_order"],
+      [
+        "title",
+        "description",
+        "tech_stack",
+        "github_url",
+        "live_url",
+        "featured",
+        "sort_order"
+      ],
       projectsList
     );
 
-    console.log("جاري إدخال الخبرات العملية...");
+    console.log("جاري إدخال الخبرات...");
+
+    await db.query(`DELETE FROM experience`);
     await insertMany(
       "experience",
-      ["company", "role", "description", "location", "start_date", "end_date", "sort_order"],
+      [
+        "title",
+        "type",
+        "description",
+        "date",
+        "sort_order"
+      ],
       experienceList
     );
 
     console.log("جاري إدخال المؤهلات الدراسية...");
+
+    await db.query(`DELETE FROM education`);
     await insertMany(
       "education",
-      ["institution", "degree", "field", "start_date", "end_date", "sort_order"],
+      [
+        "institution",
+        "degree",
+        "field",
+        "start_date",
+        "end_date",
+        "sort_order"
+      ],
       educationList
     );
 
     console.log("تم إدخال جميع البيانات بنجاح!");
   } catch (error) {
-    console.error("حدث خطأ أثناء إدخال البيانات:", error.message);
-  } finally {
-    db.close();
+    console.error(
+      "حدث خطأ أثناء إدخال البيانات:",
+      error.message
+    );
   }
 };
 
