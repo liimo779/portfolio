@@ -54,15 +54,17 @@ const createTables = async () => {
     // =========================
     await db.query(`DROP TABLE IF EXISTS experience CASCADE;`);
     await db.query(`
-      CREATE TABLE IF NOT EXISTS experience (
-        id SERIAL PRIMARY KEY,
-        title TEXT NOT NULL,
-        type TEXT,
-        description TEXT,
-        date TEXT,
-        sort_order INTEGER DEFAULT 0
-      )
-    `);
+       CREATE TABLE IF NOT EXISTS experience (
+    id SERIAL PRIMARY KEY,
+    title TEXT,
+    company TEXT,
+    role TEXT,
+    description TEXT,
+    location TEXT,
+    start_date TEXT,
+    end_date TEXT,
+    sort_order INTEGER DEFAULT 0
+  `);
 
     // =========================
     // Education

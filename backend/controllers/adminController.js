@@ -21,14 +21,16 @@ const RESOURCES = {
     ],
     orderBy: "sort_order ASC, id ASC",
   },
-
-  experience: {
+ experience: {
     table: "experience",
     columns: [
       "title",
-      "type",
+      "company",
+      "role",
       "description",
-      "date",
+      "location",
+      "start_date",
+      "end_date",
       "sort_order",
     ],
     orderBy: "sort_order ASC, id ASC",
@@ -83,10 +85,10 @@ const createResource = async (req, res) => {
   const values = config.columns.map((col) => {
     let val = req.body[col];
     
-    if (col === "title" && val === undefined) {
-      val = req.body["name"] ?? null;
+     if ((col === "title" || col === "name") && (val === undefined || val === null)) {
+      val = req.body["role"] ?? req.body["title"] ?? req.body["name"] ?? req.body["company"] ?? null;
     }
-    
+
     if (col === "demo_url" && val === undefined) {
       val = req.body["live_url"] ?? null;
     }
@@ -148,8 +150,10 @@ const updateResource = async (req, res) => {
 
   const values = config.columns.map((col) => {
     let val = req.body[col];
-    if (col === "title" && val === undefined) {
-      val = req.body["name"] ?? null;
+     
+    if ((col === "title" || col === "name") && (val === undefined || val === null)) {
+      val = req.body["role"] ?? req.body["title"] ?? req.body["name"] ?? req.body["company"] ?? null;
+    
     }
     if (col === "featured") {
       val = val === true || val === 1 || val === "true" ? 1 : 0;
