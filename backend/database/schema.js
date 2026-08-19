@@ -7,7 +7,7 @@ const createTables = async () => {
     // =========================
     await db.query(`
       CREATE TABLE IF NOT EXISTS profile (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         name TEXT NOT NULL,
         title TEXT,
         bio TEXT,
@@ -25,7 +25,7 @@ const createTables = async () => {
     // =========================
     await db.query(`
       CREATE TABLE IF NOT EXISTS skills (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         name TEXT NOT NULL,
         category TEXT,
         level INTEGER
@@ -35,10 +35,10 @@ const createTables = async () => {
     // =========================
     // Projects
     // =========================
-    await db.query(`DROP TABLE IF EXISTS projects;`);
+    await db.query(`DROP TABLE IF EXISTS projects CASCADE;`);
     await db.query(`
       CREATE TABLE IF NOT EXISTS projects (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         title TEXT NOT NULL,
         description TEXT,
         tech_stack TEXT,
@@ -52,10 +52,10 @@ const createTables = async () => {
     // =========================
     // Experience
     // =========================
-    await db.query(`DROP TABLE IF EXISTS experience;`);
+    await db.query(`DROP TABLE IF EXISTS experience CASCADE;`);
     await db.query(`
        CREATE TABLE IF NOT EXISTS experience (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id SERIAL PRIMARY KEY,
     company TEXT,
     role TEXT,
     description TEXT,
@@ -71,7 +71,7 @@ const createTables = async () => {
     // =========================
     await db.query(`
       CREATE TABLE IF NOT EXISTS education (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         institution TEXT NOT NULL,
         degree TEXT,
         field TEXT,
@@ -86,7 +86,7 @@ const createTables = async () => {
     // =========================
     await db.query(`
       CREATE TABLE IF NOT EXISTS messages (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         name TEXT NOT NULL,
         email TEXT NOT NULL,
         message TEXT NOT NULL,

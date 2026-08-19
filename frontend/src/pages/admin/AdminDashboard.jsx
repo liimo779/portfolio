@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import ProfileEditor from "./ProfileEditor";
 import ResourceManager from "./ResourceManager";
 import MessagesInbox from "./MessagesInbox";
+import adminApi from "../../adminApi";
 import "./admin.css";
 
 const TABS = [
@@ -16,8 +17,34 @@ const TABS = [
 
 function AdminDashboard({ onLogout }) {
   const [activeTab, setActiveTab] = useState("profile");
+  const [exporting, setExporting] = useState(false);
 
   const handleAuthError = () => onLogout();
+
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const { data } = await adminApi.get("/export");
+      const blob = new Blob([JSON.stringify(data, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `database-export-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      if (error.response?.status === 401) {
+        handleAuthError();
+      }
+    } finally {
+      setExporting(false);
+    }
+  };
 
   return (
     <div className="admin-shell">
@@ -40,6 +67,9 @@ function AdminDashboard({ onLogout }) {
           <Link to="/" className="admin-link">
             ← عرض الموقع
           </Link>
+          <button className="btn btn-ghost" onClick={handleExport} disabled={exporting}>
+            {exporting ? "جاري التصدير..." : "Export Database"}
+          </button>
           <button className="btn btn-ghost admin-logout" onClick={onLogout}>
             تسجيل الخروج
           </button>

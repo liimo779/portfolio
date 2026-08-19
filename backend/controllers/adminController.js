@@ -315,6 +315,29 @@ const deleteMessage = async (req, res) => {
 };
 
 // =========================
+// Export Database
+// =========================
+const DATABASE_TABLES = ["profile", "skills", "projects", "experience", "education", "messages"];
+
+const exportDatabase = async (req, res) => {
+  try {
+    const data = {};
+
+    for (const table of DATABASE_TABLES) {
+      const result = await db.query(`SELECT * FROM ${table}`);
+      data[table] = result.rows;
+    }
+
+    res.json({
+      exported_at: new Date().toISOString(),
+      ...data,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// =========================
 // Export
 // =========================
 module.exports = {
@@ -326,4 +349,5 @@ module.exports = {
   updateProfileAdmin,
   listMessages,
   deleteMessage,
+  exportDatabase,
 };

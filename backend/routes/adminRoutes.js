@@ -11,6 +11,7 @@ const {
   updateProfileAdmin,
   listMessages,
   deleteMessage,
+  exportDatabase,
 } = require("../controllers/adminController");
 
 const router = express.Router();
@@ -24,6 +25,8 @@ router.put("/profile", updateProfileAdmin);
 
 router.get("/messages", listMessages);
 router.delete("/messages/:id", deleteMessage);
+
+router.get("/export", exportDatabase);
 
 router.get("/resources/:resource", listResource);
 router.post("/resources/:resource", createResource);
