@@ -21,7 +21,12 @@ pool.query('SELECT NOW()')
     console.error(err);
   });
 
-console.log('DB HOST:', process.env.DB_HOST);
+const dbUrl = new URL(process.env.DATABASE_URL);
+
+console.log("DB hostname:", dbUrl.hostname);
+console.log("DB port:", dbUrl.port);
+console.log("DB database:", dbUrl.pathname);
+
 console.log('DATABASE_URL exists:', !!process.env.DATABASE_URL);
 
 app.use(cors());
