@@ -9,11 +9,7 @@ const adminRoutes = require("./routes/adminRoutes");
 
 const app = express();
 const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+  connectionString: process.env.DATABASE_URL,
 });
 
 pool.query('SELECT NOW()')
@@ -24,6 +20,9 @@ pool.query('SELECT NOW()')
     console.error('❌ DATABASE CONNECTION ERROR:');
     console.error(err);
   });
+
+console.log('DB HOST:', process.env.DB_HOST);
+console.log('DATABASE_URL exists:', !!process.env.DATABASE_URL);
 
 app.use(cors());
 app.use(express.json());
